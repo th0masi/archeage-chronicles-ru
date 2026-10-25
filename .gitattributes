@@ -1,0 +1,8 @@
+*.locres binary
+# Keep the tested CRLF/BOM bytes in GitHub source ZIPs as well as checkouts.
+*.cmd -text
+*.ps1 -text
+*.md text eol=lf
+*.json text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf

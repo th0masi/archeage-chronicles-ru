@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "version": "8",
+  "steam_app_id": 5280930,
+  "steam_build_id": 26020644,
+  "files": [
+    {
+      "path": "X5/Content/Localization/String/ru/String.locres",
+      "sha256": "0d6cbc1712bba35fb112ada2f3d321a12b832abaf7d7f35cc3aa4085a0f7c778"
+    },
+    {
+      "path": "Engine/Plugins/Online/OnlineSubsystem/Content/Localization/OnlineSubsystem/ru/OnlineSubsystem.locres",
+      "sha256": "ca626d3216129a8979e7d4f2b7bdf55d0d34d3e1fa06ccb4864b0267d1f6acd6"
+    },
+    {
+      "path": "Engine/Plugins/Online/OnlineSubsystemSteam/Content/Localization/OnlineSubsystemSteam/ru/OnlineSubsystemSteam.locres",
+      "sha256": "44c6e3b02a8a98c4a8434e6254d3c8f37213a3aa257da0bd38456f76b83a565c"
+    },
+    {
+      "path": "Engine/Plugins/Online/OnlineSubsystemUtils/Content/Localization/OnlineSubsystemUtils/ru/OnlineSubsystemUtils.locres",
+      "sha256": "b1eec5cf62f66734e2c26b7eb4ca1c783fd900498347fa12aa532c39c76fa723"
+    },
+    {
+      "path": "X5/Plugins/XeSS/Content/Localization/XeSS/ru/XeSS.locres",
+      "sha256": "b7848683d081f256b80cf332f3a959289aa0a4f8e6f4a6bd4b81e6f03c3347f7"
+    }
+  ]
+}

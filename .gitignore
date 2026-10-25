@@ -1,0 +1,21 @@
+# Public repository allowlist. All research, dumps, exports, keys,
+# private settings, backups, logs, ZIPs and intermediate versions stay out.
+*
+!.gitignore
+!.gitattributes
+!README.md
+!Enable-Russian.cmd
+!release-manifest.json
+!tools/
+!tools/Enable-Russian.ps1
+
+# Traverse payload directories, but expose only the five Russian resources.
+!Engine/
+!Engine/**/
+!X5/
+!X5/**/
+!X5/Content/Localization/String/ru/String.locres
+!Engine/Plugins/Online/OnlineSubsystem/Content/Localization/OnlineSubsystem/ru/OnlineSubsystem.locres
+!Engine/Plugins/Online/OnlineSubsystemSteam/Content/Localization/OnlineSubsystemSteam/ru/OnlineSubsystemSteam.locres
+!Engine/Plugins/Online/OnlineSubsystemUtils/Content/Localization/OnlineSubsystemUtils/ru/OnlineSubsystemUtils.locres
+!X5/Plugins/XeSS/Content/Localization/XeSS/ru/XeSS.locres
