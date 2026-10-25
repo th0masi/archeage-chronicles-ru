@@ -10,6 +10,13 @@
 !tools/
 !tools/Enable-Russian.ps1
 
+# Screenshots displayed in the README.
+!docs/
+!docs/screenshots/
+!docs/screenshots/menu.png
+!docs/screenshots/inventory.png
+!docs/screenshots/gameplay.png
+
 # Traverse payload directories, but expose only the five Russian resources.
 !Engine/
 !Engine/**/
