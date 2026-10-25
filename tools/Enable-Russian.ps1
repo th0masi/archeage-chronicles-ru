@@ -1,5 +1,6 @@
 ﻿param(
     [Parameter(Mandatory=$true)][string]$GameRoot,
+    [ValidateSet('ru','en')][string]$Culture = 'ru',
     [switch]$ValidateOnly
 )
 $ErrorActionPreference = 'Stop'
@@ -59,7 +60,7 @@ function Read-Settings([byte[]]$Bytes) {
     return [pscustomobject]@{ Text=$value; Encoding=$encoding; Preamble=$preamble }
 }
 
-function Set-RussianCulture([string]$Text) {
+function Set-GameCulture([string]$Text,[string]$TargetCulture) {
     $newline=[regex]::Match($Text,'\r\n|\r|\n').Value
     if (-not $newline) { $newline="`r`n" }
     $lines=[Collections.Generic.List[object]]::new()
@@ -79,19 +80,19 @@ function Set-RussianCulture([string]$Text) {
         }
     }
     if ($cultureIndices.Count -gt 0) {
-        $lines[$cultureIndices[0]].Value='Culture=ru'
+        $lines[$cultureIndices[0]].Value=('Culture='+$TargetCulture)
         for ($j=$cultureIndices.Count-1; $j -ge 1; $j--) { $lines.RemoveAt($cultureIndices[$j]) }
     } elseif ($sectionStart -ge 0) {
         if ($sectionEnd -lt 0) { $sectionEnd=$lines.Count }
         $cultureEol=$newline
         if ($sectionEnd -eq $lines.Count -and $lines.Count -gt 0 -and -not $lines[$lines.Count-1].Eol) { $cultureEol='' }
         if ($sectionEnd -gt 0 -and -not $lines[$sectionEnd-1].Eol) { $lines[$sectionEnd-1].Eol=$newline }
-        $lines.Insert($sectionEnd,[pscustomobject]@{ Value='Culture=ru'; Eol=$cultureEol })
+        $lines.Insert($sectionEnd,[pscustomobject]@{ Value=('Culture='+$TargetCulture); Eol=$cultureEol })
     } else {
         $lastEol=$newline
         if ($lines.Count -gt 0 -and -not $lines[$lines.Count-1].Eol) { $lines[$lines.Count-1].Eol=$newline; $lastEol='' }
         $lines.Add([pscustomobject]@{ Value='[Internationalization]'; Eol=$newline })
-        $lines.Add([pscustomobject]@{ Value='Culture=ru'; Eol=$lastEol })
+        $lines.Add([pscustomobject]@{ Value=('Culture='+$TargetCulture); Eol=$lastEol })
     }
     $builder=[Text.StringBuilder]::new()
     foreach ($line in $lines) { $null=$builder.Append($line.Value).Append($line.Eol) }
@@ -136,10 +137,14 @@ try {
     $existed=[IO.File]::Exists($settingsPath)
     if ($existed) { $oldBytes=[IO.File]::ReadAllBytes($settingsPath) } else { $oldBytes=[byte[]]@() }
     $settings=Read-Settings $oldBytes
-    $newText=Set-RussianCulture $settings.Text
+    $newText=Set-GameCulture $settings.Text $Culture
     $newBytes=[byte[]]($settings.Preamble+$settings.Encoding.GetBytes($newText))
     if ($ValidateOnly) { Write-Host 'Проверка пройдена: пять файлов перевода на месте. Настройки не изменены.'; exit 0 }
-    if ($existed -and (Test-BytesEqual $oldBytes $newBytes)) { Write-Host 'Русский язык уже включён. Демо можно запускать обычным способом.'; exit 0 }
+    if ($existed -and (Test-BytesEqual $oldBytes $newBytes)) {
+        if ($Culture -eq 'en') { Write-Host 'Английский язык уже выбран. Если в Steam добавлен -culture=ru, удалите этот параметр перед запуском.' }
+        else { Write-Host 'Русский язык уже включён. Демо можно запускать обычным способом.' }
+        exit 0
+    }
     Assert-GameClosed
     $settingsDirectory=[IO.Path]::GetDirectoryName($settingsPath)
     $null=[IO.Directory]::CreateDirectory($settingsDirectory)
@@ -156,10 +161,11 @@ try {
     }
     $tempPath=$null
     $tempOwned=$false
-    Write-Host 'Готово! Русский язык включён. Запустите демо обычным способом.'
+    if ($Culture -eq 'en') { Write-Host 'Готово! Выбран английский язык. Если в Steam добавлен -culture=ru, удалите этот параметр перед запуском.' }
+    else { Write-Host 'Готово! Русский язык включён. Запустите демо обычным способом.' }
     exit 0
 } catch {
-    Write-Host ('Не удалось включить русский язык: '+$_.Exception.Message) -ForegroundColor Red
+    Write-Host ('Не удалось переключить язык: '+$_.Exception.Message) -ForegroundColor Red
     exit 1
 } finally {
     if ($tempOwned -and $tempPath -and [IO.File]::Exists($tempPath)) { [IO.File]::Delete($tempPath) }

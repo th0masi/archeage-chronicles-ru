@@ -24,5 +24,6 @@
       "path": "X5/Plugins/XeSS/Content/Localization/XeSS/ru/XeSS.locres",
       "sha256": "b7848683d081f256b80cf332f3a959289aa0a4f8e6f4a6bd4b81e6f03c3347f7"
     }
-  ]
+  ],
+  "package_version": "8.1"
 }

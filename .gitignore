@@ -5,6 +5,7 @@
 !.gitattributes
 !README.md
 !Enable-Russian.cmd
+!Disable-Russian.cmd
 !release-manifest.json
 !tools/
 !tools/Enable-Russian.ps1
